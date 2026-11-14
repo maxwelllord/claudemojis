@@ -1,0 +1,6 @@
+# upstream twemoji checkouts (clone them yourself, see README)
+twemoji-src/
+twemoji-jdecked/
+
+__pycache__/
+*.pyc
