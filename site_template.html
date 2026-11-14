@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>claudemojis</title>
+<meta name="description" content="Flower-Claude versions of the Twemoji face emoji. Browse, search and download as PNG or SVG.">
+<link rel="icon" href="custom/png/claude-smiling-face-with-halo.png">
+<style>
+:root { --bg:#f6f5f3; --surface:#fff; --fg:#1f1d1b; --muted:#6f6a64; --line:#e4e0db; --accent:#c4623f; color-scheme:light }
+@media (prefers-color-scheme:dark) { :root { --bg:#161514; --surface:#201e1c; --fg:#efebe6; --muted:#a29c95; --line:#34302d; --accent:#e3896a; color-scheme:dark } }
+* { box-sizing:border-box }
+body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui,"Segoe UI",sans-serif }
+.wrap { max-width:1120px; margin:0 auto; padding:40px 16px 64px }
+header { display:flex; flex-wrap:wrap; gap:8px 24px; align-items:baseline; justify-content:space-between }
+h1 { margin:0; font-size:2rem; letter-spacing:-.02em }
+header p { margin:0; color:var(--muted) }
+a { color:var(--accent) }
+.bar { display:flex; gap:12px; align-items:center; margin:24px 0; flex-wrap:wrap }
+input[type=search] { flex:1 1 240px; padding:10px 14px; font:inherit; color:var(--fg); background:var(--surface); border:1px solid var(--line); border-radius:10px }
+input[type=search]:focus-visible, button:focus-visible, .tile:focus-visible { outline:2px solid var(--accent); outline-offset:2px }
+.count { color:var(--muted); font-size:13px }
+#grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:10px }
+.tile { display:flex; flex-direction:column; align-items:center; gap:6px; padding:12px 6px 10px; background:var(--surface); border:1px solid var(--line); border-radius:12px; cursor:pointer; font:inherit; color:inherit }
+.tile:hover { border-color:var(--accent) }
+.tile img { width:72px; height:72px }
+.tile span { font-size:11.5px; line-height:1.25; text-align:center; color:var(--muted); overflow-wrap:anywhere }
+dialog { border:1px solid var(--line); border-radius:16px; background:var(--surface); color:var(--fg); padding:24px; width:min(340px,92vw); text-align:center }
+dialog::backdrop { background:rgba(0,0,0,.45) }
+dialog img { width:192px; height:192px }
+dialog h2 { margin:8px 0 2px; font-size:1.1rem }
+dialog code { color:var(--muted); font-size:13px }
+.actions { display:flex; gap:8px; justify-content:center; margin-top:16px; flex-wrap:wrap }
+.btn { padding:8px 14px; border-radius:8px; border:1px solid var(--line); background:var(--bg); color:var(--fg); font:inherit; text-decoration:none; cursor:pointer }
+.btn.primary { background:var(--accent); border-color:var(--accent); color:#fff }
+.empty { color:var(--muted); padding:40px 0; text-align:center }
+footer { margin-top:48px; color:var(--muted); font-size:13px }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>claudemojis</h1>
+    <p>Flower-Claude <a href="https://github.com/jdecked/twemoji">Twemoji</a> faces · <a href="https://github.com/maxwelllord/claudemojis">GitHub</a></p>
+  </header>
+  <div class="bar">
+    <input type="search" id="q" placeholder="Search by name, emoji or codepoint…" aria-label="Search emoji" autofocus>
+    <span class="count" id="count"></span>
+  </div>
+  <div id="grid"></div>
+  <p class="empty" id="empty" hidden>No faces match that search.</p>
+  <footer>Artwork derived from Twemoji by Twitter, Inc. and contributors, licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a>; modified from the originals. PNGs are 256×256 with transparent backgrounds.</footer>
+</div>
+<dialog id="dlg">
+  <img id="dimg" alt="">
+  <h2 id="dname"></h2>
+  <code id="dcode"></code>
+  <div class="actions">
+    <a class="btn primary" id="dpng" download>PNG</a>
+    <a class="btn" id="dsvg" download>SVG</a>
+    <button class="btn" id="dcopy">Copy emoji</button>
+    <button class="btn" id="dclose">Close</button>
+  </div>
+</dialog>
+<script>
+const DATA = __DATA__;
+const $ = id => document.getElementById(id);
+const grid = $('grid'), dlg = $('dlg');
+grid.innerHTML = DATA.map((e, i) =>
+  `<button class="tile" data-i="${i}"><img loading="lazy" src="${e.png}" alt="${e.name}" width="72" height="72"><span>${e.name}</span></button>`).join('');
+const tiles = [...grid.children];
+const hay = DATA.map(e => (e.name + ' ' + e.char + ' ' + e.code).toLowerCase());
+function filter() {
+  const q = $('q').value.trim().toLowerCase();
+  let n = 0;
+  tiles.forEach((t, i) => { const show = !q || hay[i].includes(q); t.hidden = !show; n += show; });
+  $('count').textContent = n + ' of ' + DATA.length;
+  $('empty').hidden = n > 0;
+}
+$('q').addEventListener('input', filter); filter();
+grid.addEventListener('click', ev => {
+  const t = ev.target.closest('.tile'); if (!t) return;
+  const e = DATA[t.dataset.i];
+  $('dimg').src = e.png; $('dimg').alt = e.name;
+  $('dname').textContent = e.name; $('dcode').textContent = 'U+' + e.code.toUpperCase().replace(/-/g, ' U+');
+  $('dpng').href = e.png; $('dpng').download = e.png.split('/').pop();
+  $('dsvg').href = e.svg; $('dsvg').download = 'claude-' + e.png.split('claude-')[1].replace('.png', '.svg');
+  $('dcopy').textContent = 'Copy emoji'; $('dcopy').onclick = () => navigator.clipboard.writeText(e.char).then(() => $('dcopy').textContent = 'Copied');
+  dlg.showModal();
+});
+$('dclose').onclick = () => dlg.close();
+dlg.addEventListener('click', ev => { if (ev.target === dlg) dlg.close(); });
+</script>
+</body>
+</html>

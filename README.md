@@ -7,6 +7,8 @@ Flower-Claude versions of the [Twemoji](https://github.com/jdecked/twemoji) face
 | Path | What it is |
 |---|---|
 | `flowerize.py` | Generates flower faces from twemoji SVGs (Python 3, no dependencies) |
+| `make_site.py` | Builds `index.html` (from `site_template.html`), the searchable gallery served by GitHub Pages |
+| `out/png/`, `custom/png/` | 256×256 PNG renders, named `claude-<name>.png` |
 | `make_preview.py` | Builds `preview.html`, a page comparing every face with its original |
 | `New Project(1).svg` | The flower shape |
 | `custom/` | Hand-edited finished faces; these take priority over generated ones |
