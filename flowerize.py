@@ -303,6 +303,25 @@ def face_names(emoji_test=DEFAULT_EMOJI_TEST):
     return names
 
 
+def readable_names(emoji_test=DEFAULT_EMOJI_TEST):
+    """{twemoji file stem: 'claude-<unicode-name>'}, e.g. '1f600' -> 'claude-grinning-face'."""
+    out = {}
+    for line in Path(emoji_test).read_text(encoding="utf-8").splitlines():
+        m = re.match(r"([0-9A-F ]+?)\s*;\s*[\w-]+\s*#\s*\S+\s+E[\d.]+\s+(.*)", line)
+        if m:
+            slug = re.sub(r"[^a-z0-9]+", "-", m.group(2).lower().replace("’", "")).strip("-")
+            out.setdefault(twemoji_name(m.group(1).split()), "claude-" + slug)
+    return out
+
+
+def codes_by_readable_name(emoji_test=DEFAULT_EMOJI_TEST):
+    """Inverse of readable_names: 'claude-grinning-face' -> '1f600' (fully-qualified form wins)."""
+    out = {}
+    for code, name in readable_names(emoji_test).items():
+        out.setdefault(name, code)
+    return out
+
+
 # --------------------------------------------------------------------------
 # Flower
 # --------------------------------------------------------------------------
@@ -573,6 +592,7 @@ def main():
     else:
         names = face_names(args.emoji_test)
 
+    readable = readable_names(args.emoji_test)
     done, skipped = [], []
     for name in names:
         f = args.src / f"{name}.svg"
@@ -585,7 +605,7 @@ def main():
         if out is None:
             skipped.append(name)
             continue
-        (args.out / f.name).write_text(out, encoding="utf-8")
+        (args.out / f"{readable.get(name, name)}.svg").write_text(out, encoding="utf-8")
         done.append(name)
 
     print(f"flowerized {len(done)} emoji -> {args.out}")

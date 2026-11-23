@@ -16,7 +16,9 @@ args = ap.parse_args()
 
 flower = F.Flower(F.DEFAULT_FLOWER)
 names = list(F.SUBSET if args.subset else F.face_names())
-custom = {p.stem: p for p in sorted(args.custom.glob("*.svg"))} if args.custom.is_dir() else {}
+code_of = F.codes_by_readable_name()
+custom = ({code_of.get(p.stem, p.stem): p for p in sorted(args.custom.glob("*.svg"))}
+          if args.custom.is_dir() else {})
 if not args.subset:
     names += [n for n in custom if n not in names]  # hand-made extras not in the face list
 
