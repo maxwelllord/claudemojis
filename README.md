@@ -1,6 +1,6 @@
 # claudemojis
 
-Flower-Claude versions of the [Twemoji](https://github.com/jdecked/twemoji) face emoji: the round face is swapped for the Claude flower, with the eyes, mouth and accessories kept.
+Flower-Claude versions of the [Twemoji](https://github.com/jdecked/twemoji) face emoji.
 
 ![A grid of flower-Claude emoji faces](preview.png)
 
@@ -15,6 +15,7 @@ Flower-Claude versions of the [Twemoji](https://github.com/jdecked/twemoji) face
 | `New Project(1).svg` | The flower shape |
 | `custom/` | Hand-edited finished faces; these take priority over generated ones |
 | `out/svg/` | Generated faces |
+| `new/`, `new/png/` | Original faces with no Unicode equivalent, as SVG and 256×256 PNG |
 | `data/emoji-test.txt` | Unicode's emoji list (17.0), used to pick out the face emoji |
 
 ## Regenerating

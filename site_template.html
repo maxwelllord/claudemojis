@@ -82,7 +82,8 @@ grid.addEventListener('click', ev => {
   const t = ev.target.closest('.tile'); if (!t) return;
   const e = DATA[t.dataset.i];
   $('dimg').src = e.png; $('dimg').alt = e.name;
-  $('dname').textContent = e.name; $('dcode').textContent = 'U+' + e.code.toUpperCase().replace(/-/g, ' U+');
+  $('dname').textContent = e.name; $('dcode').textContent = e.code ? 'U+' + e.code.toUpperCase().replace(/-/g, ' U+') : 'Original face';
+  $('dcopy').hidden = !e.char;
   $('dpng').href = e.png; $('dpng').download = e.png.split('/').pop();
   $('dsvg').href = e.svg; $('dsvg').download = 'claude-' + e.png.split('claude-')[1].replace('.png', '.svg');
   $('dcopy').textContent = 'Copy emoji'; $('dcopy').onclick = () => navigator.clipboard.writeText(e.char).then(() => $('dcopy').textContent = 'Copied');

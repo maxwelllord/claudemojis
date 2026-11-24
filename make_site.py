@@ -21,6 +21,14 @@ for folder, svgdir in (('out', 'out/svg'), ('custom', 'custom')):
             png=f'{folder}/png/{stem}.png', svg=f.replace(os.sep, '/'),
             char=''.join(chr(int(c, 16)) for c in code.split('-')))
 data = sorted(items.values(), key=lambda i: i['code'])
+
+# Original faces with no Unicode equivalent: named from the file, listed first.
+extras = []
+for f in sorted(glob.glob('new/*.svg')):
+    stem = os.path.basename(f)[:-4]
+    extras.append(dict(name=stem.removeprefix('claude-').replace('-', ' '), code='', char='',
+                       png=f'new/png/{stem}.png', svg=f.replace(os.sep, '/')))
+data = extras + data
 for i in data:
     assert os.path.exists(i['png']), i['png']
 
