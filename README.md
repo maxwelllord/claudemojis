@@ -12,7 +12,7 @@ Flower-Claude versions of the [Twemoji](https://github.com/jdecked/twemoji) face
 | `make_site.py` | Builds `index.html` (from `site_template.html`), the searchable gallery served by GitHub Pages |
 | `out/png/`, `custom/png/` | 256×256 PNG renders, named `claude-<name>.png` (SVGs use the same `claude-<name>.svg` names) |
 | `make_preview.py` | Builds `preview.html`, a page comparing every face with its original |
-| `New Project(1).svg` | The flower shape |
+| `flower.svg` | The flower shape |
 | `custom/` | Hand-edited finished faces; these take priority over generated ones |
 | `out/svg/` | Generated faces |
 | `new/`, `new/png/` | Original faces with no Unicode equivalent, as SVG and 256×256 PNG |

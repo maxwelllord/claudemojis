@@ -29,7 +29,7 @@ ET.register_namespace("", SVG_NS)
 HERE = Path(__file__).resolve().parent
 # jdecked/twemoji is the maintained fork of twitter/twemoji (Emoji 17).
 DEFAULT_SRC = HERE / "twemoji-jdecked" / "assets" / "svg"
-DEFAULT_FLOWER = HERE / "New Project(1).svg"
+DEFAULT_FLOWER = HERE / "flower.svg"
 DEFAULT_OUT = HERE / "out" / "svg"
 
 DEFAULT_EMOJI_TEST = HERE / "data" / "emoji-test.txt"
